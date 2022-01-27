@@ -2,7 +2,7 @@
 /node_modules
 
 //mongo config
-config.js
+
 
 # misc
 .env
