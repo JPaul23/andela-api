@@ -25,8 +25,8 @@ export const userSignup = async (req, res, next) => {
         const hashedPassword = await bcrypt.hash(req.body.password, 10); //salt gen & hash the password.
 
         const user = {
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
+            username: req.body.username,
+            phone: req.body.phone,
             email: req.body.email,
             password: hashedPassword
         }; //store the hashed password

@@ -5,12 +5,12 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 var User = new Schema({
-    firstname: {
+    username: {
         type: String,
         required: true
     },
-    lastname: {
-        type: String,
+    phone: {
+        type: Number,
         default: ''
     },
     email: {

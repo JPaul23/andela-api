@@ -1,0 +1,5 @@
+---
+applications:
+ - name: andela-api
+   random-route: false
+   memory: 64MB
