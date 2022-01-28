@@ -10,7 +10,7 @@ var User = new Schema({
         required: true
     },
     phone: {
-        type: Number,
+        type: String,
         default: ''
     },
     email: {
