@@ -22,6 +22,8 @@ export const verifyToken = (req, res, next) => {
     })
 
 }
+//verify admin??
+
 
 //verifying incoming user
 export const verifyUser = (req, res, next) => {
@@ -33,7 +35,7 @@ export const verifyUser = (req, res, next) => {
             if (err) {
                 let err = new Error('You are not authenticated!');
                 err.status = 401;
-                return next(err);
+                return next(res.json({ code: err.status, message: err.message }));
             } else {
                 req.decoded = decoded;
                 next();
@@ -42,14 +44,14 @@ export const verifyUser = (req, res, next) => {
     } else {
         let err = new Error('No token provided!');
         err.status = 403;
-        return next(err);
+        return next(res.json({ code: err.status, 'message': err.message }));
     }
 };
 
 export const authorization = (req, res, next) => {
     const token = req.cookies.jwt;
     if (!token) {
-        return res.sendStatus(403);
+        return res.status(403).json({ code: 403, message: "No token available" });
     }
     try {
         const data = jwt.verify(token, config.ACCESS_TOKEN_SECRET);

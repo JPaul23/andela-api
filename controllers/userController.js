@@ -6,7 +6,7 @@ import config from '../config.js';
 const Users = userModel;
 
 export const userLogout = (req, res) => {
-    return res.status(200).clearCookie('jwt').json({ message: "Successfully logged out 🍀" });
+    return res.status(200).clearCookie('jwt').json({ code: 200, message: "Successfully logged out 🍀" });
 }
 
 export const getUser = (req, res, next) => {
@@ -36,24 +36,24 @@ export const userSignup = async (req, res, next) => {
             console.log(` ${user.firstname}'s account has been created successfully!`);
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.json(user)
-        }, (err) => res.status(400).json({ error: 'Could not perform your operation' }))
-            .catch((err) => res.status(400).json({ error: 'There is an Error' }));
+            res.status(200).json({ code: 200, message: 'OK' })
+        }, (err) => res.status(400).json({ message: 'Could not perform your operation' }))
+            .catch((err) => res.status(400).json({ code: 400, message: 'There is an Error' }));
 
 
 
     } catch (error) {
         res.statusCode = 500;
-        res.json({ error: 'Looks like it\'s our problem, we\'ll solve it in no time' });
+        res.json({ code: 500, message: 'Looks like it\'s our problem, we\'ll solve it in no time' });
 
     }
 
 
 }
 export const findUser = (req, res, next) => {
-    Users.findOne({ 'email': `${req.body.email}` }, 'email password', function (err, user) {
-        if (err) return res.status(400).json({ error: 'There is an Error' });
-        res.status(400).json({ error: 'User already exists' });
+    Users.findOne({ 'email': `${req.body.email}` }, function (err, user) {
+        if (err) return res.status(400).json({ code: 400, message: 'There is an Error' });
+        res.status(400).json({ code: 400, message: 'User with that email already exists' });
     });
 
     /* 
@@ -67,7 +67,7 @@ export const userLogin = async (req, res, next) => {
 
     Users.findOne({ 'email': `${req.body.email}` }, 'email password', function (err, user) {
         if (user == null) {
-            return res.status(400).send("Cannot find user with that Email")
+            return res.status(400).json({ code: 400, message: 'Cannot find user with that Email' })
         }
 
         /*  console.log('%s is a %s.', user.email,
@@ -87,16 +87,26 @@ export const userLogin = async (req, res, next) => {
                 });
 
                 res.setHeader('Content-Type', 'application/json');
-                res.json({ success: true, token: accessToken, status: 'You are successfully logged in!' });
+                res.json({ code: 200, token: accessToken, message: 'You are successfully logged in!' });
             }
             else {
-                res.status(400).json({ error: 'Not allowed' });
+                res.status(400).json({ code: 400, message: 'Not allowed' });
             }
         }
         catch (error) {
             res.statusCode = 500;
-            res.json({ error: 'Looks like it\'s our problem, we\'ll solve it in no time' });
+            res.json({ code: 500, message: 'Looks like it\'s our problem, we\'ll solve it in no time' });
         }
     })
 
+}
+
+export const deleteUsers = (req, res, next) => {
+    Users.remove({})
+        .then((response) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json({ code: 200, message: "All Users deleted!" });
+        }, (err) => res.status(400).json({ code: 400, message: 'Can not perform your operation' }))
+        .catch((err) => res.status(400).json({ code: 400, message: 'There is an Error' }));
 }

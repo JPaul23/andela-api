@@ -6,22 +6,20 @@ export const getArticles = (req, res, next) => {
     /* res.json(articles.filter(article => article.user === req.user.email)) */
     Articles.find({})
         .then((articles) => {
-            res.statusCode = 200;
+            //res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.json(articles);
-        }, (err) => res.status(400).json({ error: 'Can not perform your operation' }))
-        .catch((err) => res.status(400).json({ error: 'There is an Error' }));
+            res.status(200).json({ code: res.status, data: articles });
+        }, (err) => res.status(400).json({ message: 'Can not perform your operation' }))
+        .catch((err) => res.status(400).json({ message: 'There is an Error' }));
 }
 
 export const postArticle = (req, res, next) => {
     Articles.create(req.body)
         .then((article) => {
-            console.log('article Created ', article);
-            res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.json(article)
-        }, (err) => res.status(400).json({ error: 'Can not perform your operation' }))
-        .catch((err) => res.status(400).json({ error: 'There is an Error' }));
+            res.status(200).json({ code: res.status, message: 'Your post has been created!' })
+        }, (err) => res.status(400).json({ message: 'Can not perform your operation' }))
+        .catch((err) => res.status(400).json({ message: 'There is an Error' }));
 }
 
 export const deleteArticles = (req, res, next) => {
@@ -30,8 +28,8 @@ export const deleteArticles = (req, res, next) => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
             res.json(response)
-        }, (err) => res.status(400).json({ error: 'Can not perform your operation' }))
-        .catch((err) => res.status(400).json({ error: 'There is an Error' }));
+        }, (err) => res.status(400).json({ message: 'Can not perform your operation' }))
+        .catch((err) => res.status(400).json({ message: 'There is an Error' }));
 }
 
 export const getArticle = (req, res, next) => {

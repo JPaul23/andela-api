@@ -7,15 +7,14 @@ import config from './config.js';
 
 
 //connecting to mongo
-//const url = config.mongoUrl;
-const atlasUrl = config.mongoAtlas;
+const url = config.mongoUrl;
+//const atlasUrl = config.mongoAtlas;
 
 //const connection = mongoose.connect(atlasConnection);
-const atlasConnection = mongoose.connect(atlasUrl,
-    {
-        useNewUrlParser: true, useUnifiedTopology: true
-    })
-atlasConnection.then((db) => {
+const connection = mongoose.connect(url);
+//const atlasConnection = mongoose.connect(atlasUrl, { useNewUrlParser: true, useUnifiedTopology: true    })
+
+connection.then((db) => {
     console.log('Connected correctly to MongoDB server! ');
 }, (err) => {
     console.log('***** Not connected to MongoDB ***** server!');
@@ -35,8 +34,8 @@ app.use(cors());
 /* app.use('/api/v1/', function (req, res, next) {
     console.log(`==> Method: ${req.method} --Path: ${req.path} --IP: ${req.ip} --Code: ${res.statusCode}`);
     next();
-});
- */
+}); */
+
 app.use('/api/v1/', indexRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/articles', articlesRouter);

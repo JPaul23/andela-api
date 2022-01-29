@@ -1,6 +1,6 @@
 import express from "express";
 
-import { verifyToken, verifyUser } from "../Middleware/authentication.js";
+import { authorization, verifyToken, verifyUser } from "../Middleware/authentication.js";
 import {
     deleteArticle,
     deleteArticles,
