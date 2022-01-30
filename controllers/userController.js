@@ -33,11 +33,14 @@ export const userSignup = async (req, res, next) => {
 
 
         Users.create(user).then((user) => {
-            console.log(` ${user.firstname}'s account has been created successfully!`);
+            console.log(` ${user.username}'s account has been created successfully!`);
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.status(200).json({ code: 200, message: 'OK' })
-        }, (err) => res.status(400).json({ message: 'Could not perform your operation' }))
+            res.status(200).json({ code: 200, message: ` ${user.username}'s account has been created successfully!` })
+        }, (err) => {
+            console.log(err)
+            res.status(400).json({ code: 400, message: 'Could not perform your operation' })
+        })
             .catch((err) => res.status(400).json({ code: 400, message: 'There is an Error' }));
 
 
@@ -66,7 +69,7 @@ export const userLogin = async (req, res, next) => {
     //authenticate user
 
     Users.findOne({ 'email': `${req.body.email}` }, 'email password', function (err, user) {
-        if (user == null) {
+        if (user === null) {
             return res.status(400).json({ code: 400, message: 'Cannot find user with that Email' })
         }
 
@@ -79,14 +82,13 @@ export const userLogin = async (req, res, next) => {
                 const userMail = { email: req.body.email };
                 //sign the email
                 const accessToken = jwt.sign(userMail, config.ACCESS_TOKEN_SECRET);
+                res.setHeader('Content-Type', 'application/json');
 
                 res.status(200).cookie('jwt', accessToken, {
                     maxAge: 1000 * 60 * 15, //after 15mini
                     sameSite: 'strict',
                     httpOnly: true
                 });
-
-                res.setHeader('Content-Type', 'application/json');
                 res.json({ code: 200, token: accessToken, message: 'You are successfully logged in!' });
             }
             else {
